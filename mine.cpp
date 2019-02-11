@@ -1,9 +1,7 @@
 #include <iostream>
+#include <vector>
 #include <unistd.h>
 #include <termios.h>
-
-
-typedef char KEY;
 
 enum KEYS{
 	K_ESC = '\e',
@@ -11,8 +9,52 @@ enum KEYS{
 	K_UP = 'A',
 	K_DOWN = 'B',
 	K_LEFT = 'D',
-	K_RIGHT = 'C'
+	K_RIGHT = 'C',
+    K_F = 'f', //flag a cell
+    K_S = 's' //sweep a cell
 }; 
+
+enum CELL_STATES{
+    EMPTY = -1,
+    BOMB,
+    _1,
+    _2,
+    _3,
+    _4,
+    _5,
+    _6,
+    _7,
+    _8
+};
+
+constexpr auto red_bg = "\033[1;41m";
+constexpr auto blue_bg = "\033[1;44m";
+constexpr auto white_bg = "\033[1;47m";
+constexpr auto reset = "\033[0m";
+constexpr auto endl = "\n";
+
+using KEY = char;
+using GRID_INT = std::vector <std::vector <int>>;
+using GRID_BOOL = std::vector <std::vector <bool>>;
+using COLOUR = std::string;
+
+// struct Cell{
+//         Cell();
+//         void toggle();  
+//         bool hidden;
+//         CELL_STATES state;
+//         COLOUR col;    
+// }
+
+// Cell::Cell(){
+//     hidden = true;
+//     state = EMPTY;
+//     col = white;
+// }
+
+// void Cell::toggle(){
+//     hidden = false; 
+// }
 
 char getch() {
 	char buf = 0;
@@ -41,14 +83,35 @@ KEY getKey(){
 	return c;
 }
 
+class Field{
+    public:
+        Field();
+        void drawField();
+        void getPos();
+    private:
+        int l;
+        int b;
+        int m;
+        int x;
+        int y;
+        GRID_INT cells;
+        GRID_BOOL hidden;
 
-std::string red_bg = "\033[1;41m";
-std::string reset = "\033[0m";
-std::string endl = "\n";
+} field;
 
-int l, b;
+Field::Field(){
+    std::cin >> l >> b >> m;
+    x = l/2;
+    y = b/2;
+    for(int i = 0; i < l; ++i){
+        std::vector<int> v(b, EMPTY);  
+        cells.push_back(v);
+        std::vector<bool> s(b, true);
+        hidden.push_back(s);
+    } 
+}
 
-void drawGrid(int l, int b, int x, int y){
+void Field::drawField(){
     std::cout << endl;
 	std::cout << "┌" ;
 	for(int i = 0; i < l - 1; ++i) std::cout << "───┬";
@@ -58,6 +121,7 @@ void drawGrid(int l, int b, int x, int y){
         std::cout << "│";
 		for(int k = 0; k < l; ++k){
             std::cout << " ";
+            if(hidden[j][k]) std::cout << white_bg;
             if(j == y && k == x) std::cout << red_bg;
             std::cout << " " << reset << " │";
 		}
@@ -74,7 +138,7 @@ void drawGrid(int l, int b, int x, int y){
 	std::cout << endl;
 }
 
-void getPos(int &x, int &y){
+void Field::getPos(){
     KEY k = getKey();
     switch(k){
         case K_UP : 
@@ -93,14 +157,9 @@ void getPos(int &x, int &y){
 }
 
 int main(){
-    int x, y;
-    std::cin >> l >> b;
-    x = l/2;
-    y = b/2;
-
     while(true){
-        drawGrid(l, b, x, y);
-        getPos(x, y);
+        field.drawField();
+        field.getPos();
         system("clear");
     }
     std::cout << endl;
