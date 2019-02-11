@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <random>
 #include <unistd.h>
 #include <termios.h>
 
@@ -16,7 +17,7 @@ enum KEYS{
 
 enum CELL_STATES{
     EMPTY = -1,
-    BOMB,
+    MINE,
     _1,
     _2,
     _3,
@@ -27,34 +28,63 @@ enum CELL_STATES{
     _8
 };
 
-constexpr auto red_bg = "\033[1;41m";
-constexpr auto blue_bg = "\033[1;44m";
-constexpr auto white_bg = "\033[1;47m";
-constexpr auto reset = "\033[0m";
-constexpr auto endl = "\n";
+const std::string red_fg = "\033[1;31m";
+const std::string green_fg = "\033[1;32m";
+const std::string blue_bg = "\033[1;44m";
+const std::string white_bg = "\033[1;47m";
+const std::string reset = "\033[0m";
+const std::string endl = "\n";
+
+struct Cell{
+    Cell();
+    void toggleflag();
+    void sweep();
+    void mine();
+    bool flagged;  
+    bool hidden;
+    CELL_STATES state;
+    std::string sym;
+};
+
+Cell::Cell(){
+    hidden = true;
+    flagged = false;
+    state = EMPTY;
+    sym = white_bg + " ";
+}
+
+void Cell::toggleflag(){
+    if(hidden){
+        flagged = !flagged;
+        if(flagged){
+            sym = green_fg + "▶";
+        }
+        else{
+            sym = white_bg + " ";
+        }
+    }
+}
+
+void Cell::sweep(){
+    if(!flagged){
+        hidden = false;
+        switch(state){
+            case EMPTY:
+                sym = reset + " ";
+                return;
+            case MINE:
+                sym = red_fg + "●";
+                return;
+        }
+    }
+}
+
+void Cell::mine(){
+    state = MINE;
+}
 
 using KEY = char;
-using GRID_INT = std::vector <std::vector <int>>;
-using GRID_BOOL = std::vector <std::vector <bool>>;
-using COLOUR = std::string;
-
-// struct Cell{
-//         Cell();
-//         void toggle();  
-//         bool hidden;
-//         CELL_STATES state;
-//         COLOUR col;    
-// }
-
-// Cell::Cell(){
-//     hidden = true;
-//     state = EMPTY;
-//     col = white;
-// }
-
-// void Cell::toggle(){
-//     hidden = false; 
-// }
+using GRID = std::vector <std::vector <Cell>>;
 
 char getch() {
 	char buf = 0;
@@ -86,16 +116,16 @@ KEY getKey(){
 class Field{
     public:
         Field();
+        void mineTheField();
         void drawField();
-        void getPos();
+        void getMove();
     private:
         int l;
         int b;
         int m;
         int x;
         int y;
-        GRID_INT cells;
-        GRID_BOOL hidden;
+        GRID cells;
 
 } field;
 
@@ -103,12 +133,28 @@ Field::Field(){
     std::cin >> l >> b >> m;
     x = l/2;
     y = b/2;
-    for(int i = 0; i < l; ++i){
-        std::vector<int> v(b, EMPTY);  
+    for(int i = 0; i < b; ++i){
+        Cell c;
+        std::vector<Cell> v(l, c);
         cells.push_back(v);
-        std::vector<bool> s(b, true);
-        hidden.push_back(s);
-    } 
+    }
+    mineTheField();
+}
+
+void Field::mineTheField(){
+    std::random_device rd;
+    std::mt19937 rng(rd());
+    std::uniform_int_distribution<int> x_uni(0,l-1);
+    std::uniform_int_distribution<int> y_uni(0,b-1);
+    auto m_copy = m;
+    while(m_copy){
+        auto i = x_uni(rng);
+        auto j = y_uni(rng);
+        if (cells[i][j].state != MINE){
+            cells[i][j].mine();
+            --m_copy;
+        } 
+    }
 }
 
 void Field::drawField(){
@@ -121,9 +167,8 @@ void Field::drawField(){
         std::cout << "│";
 		for(int k = 0; k < l; ++k){
             std::cout << " ";
-            if(hidden[j][k]) std::cout << white_bg;
-            if(j == y && k == x) std::cout << red_bg;
-            std::cout << " " << reset << " │";
+            if(j == y && k == x) std::cout << blue_bg << " " << reset << " │";
+            else std::cout << cells[k][j].sym << reset << " │";
 		}
         if(j != b-1) {
             std::cout << endl << "├";
@@ -136,9 +181,10 @@ void Field::drawField(){
     for(int i = 0; i < l - 1; ++i) std::cout << "───┴";
     std::cout << "───┘";
 	std::cout << endl;
+    std::cout << x << " " << y << endl;
 }
 
-void Field::getPos(){
+void Field::getMove(){
     KEY k = getKey();
     switch(k){
         case K_UP : 
@@ -152,6 +198,12 @@ void Field::getPos(){
             return;
         case K_RIGHT:
             if(x != l-1) ++x;
+            return;
+        case K_F:
+            cells[x][y].toggleflag();
+            return;
+        case K_S:
+            cells[x][y].sweep();
             return;  
     }
 }
@@ -159,7 +211,7 @@ void Field::getPos(){
 int main(){
     while(true){
         field.drawField();
-        field.getPos();
+        field.getMove();
         system("clear");
     }
     std::cout << endl;
