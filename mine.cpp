@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <vector>
 #include <random>
 #include <unistd.h>
@@ -16,21 +17,15 @@ enum KEYS{
 }; 
 
 enum CELL_STATES{
-    EMPTY = -1,
+    EMPTY,
     MINE,
-    _1,
-    _2,
-    _3,
-    _4,
-    _5,
-    _6,
-    _7,
-    _8
+    ADJ_TO_MINE
 };
 
 const std::string red_fg = "\033[1;31m";
 const std::string green_fg = "\033[1;32m";
 const std::string blue_bg = "\033[1;44m";
+const std::string white_fg = "\033[37m";
 const std::string white_bg = "\033[1;47m";
 const std::string reset = "\033[0m";
 const std::string endl = "\n";
@@ -40,9 +35,11 @@ struct Cell{
     void toggleflag();
     void sweep();
     void mine();
+    void markAdjMine(int);
     bool flagged;  
     bool hidden;
     CELL_STATES state;
+    int noOfAdjMines;
     std::string sym;
 };
 
@@ -50,33 +47,41 @@ Cell::Cell(){
     hidden = true;
     flagged = false;
     state = EMPTY;
-    sym = white_bg + " ";
+    sym = white_bg + " " + reset + " │";
 }
 
 void Cell::toggleflag(){
     if(hidden){
         flagged = !flagged;
         if(flagged){
-            sym = green_fg + "▶";
+            sym = green_fg + "▶" + reset + " │";
         }
         else{
-            sym = white_bg + " ";
+            sym = white_bg + " " + reset + " │";
         }
     }
 }
 
 void Cell::sweep(){
-    if(!flagged){
+    if(!flagged && hidden){
         hidden = false;
         switch(state){
             case EMPTY:
-                sym = reset + " ";
+                sym = reset + " " + reset + " │";
                 return;
             case MINE:
-                sym = red_fg + "●";
+                sym = red_fg + "✸" + reset + " │";
+                return;
+            case ADJ_TO_MINE:
+                sym = white_fg + std::to_string(noOfAdjMines) + reset + " │";
                 return;
         }
     }
+}
+
+void Cell::markAdjMine(int mines){
+    state = ADJ_TO_MINE;
+    noOfAdjMines = mines;
 }
 
 void Cell::mine(){
@@ -117,6 +122,7 @@ class Field{
     public:
         Field();
         void mineTheField();
+        void markAdjMineCells();
         void drawField();
         void getMove();
     private:
@@ -139,6 +145,7 @@ Field::Field(){
         cells.push_back(v);
     }
     mineTheField();
+    markAdjMineCells();
 }
 
 void Field::mineTheField(){
@@ -157,6 +164,24 @@ void Field::mineTheField(){
     }
 }
 
+void Field::markAdjMineCells(){
+    for(int j = 0; j < b; ++j){
+        for(int i = 0; i < l; ++i){
+            if(cells[i][j].state == MINE) continue;
+            int mines = 0;
+            for(int d = j - 1; d < j + 2; ++d){
+                if (d < 0 || d > b-1) continue;
+                for(int c = i - 1; c < i + 2; ++c){
+                    if (c < 0 || c > l-1) continue;
+                    
+                    if(cells[c][d].state == MINE) ++mines;
+                }
+            }
+            if(mines) cells[i][j].markAdjMine(mines);
+        }
+    }
+}
+
 void Field::drawField(){
     std::cout << endl;
 	std::cout << "┌" ;
@@ -165,10 +190,15 @@ void Field::drawField(){
 	std::cout << endl;
 	for(int j = 0; j < b; ++j){
         std::cout << "│";
-		for(int k = 0; k < l; ++k){
-            std::cout << " ";
-            if(j == y && k == x) std::cout << blue_bg << " " << reset << " │";
-            else std::cout << cells[k][j].sym << reset << " │";
+		for(int i = 0; i < l; ++i){
+            if(cells[i][j].state != MINE || cells[i][j].hidden) std::cout << " ";
+            else std::cout << " ";
+            if(i == x && j == y){ 
+                if((cells[i][j].hidden || cells[i][j].state == EMPTY) &&
+                   (!cells[i][j].flagged) ) std::cout << blue_bg << " " << reset << " │";
+                else std::cout << blue_bg << cells[i][j].sym;
+            }
+            else std::cout << cells[i][j].sym;
 		}
         if(j != b-1) {
             std::cout << endl << "├";
