@@ -4,10 +4,27 @@
 #include <string>
 #include "setup.hpp"
 
+
+enum CELL_STATES{
+    EMPTY,
+    MINE,
+    ADJ_TO_MINE
+};
+
+using COLOUR = const std::string;
+
+COLOUR red_fg = "\033[1;31m";
+COLOUR green_fg = "\033[1;32m";
+COLOUR blue_bg = "\033[1;44m";
+COLOUR white_fg = "\033[37m";
+COLOUR white_bg = "\033[1;47m";
+COLOUR reset = "\033[0m";
+COLOUR endl = "\n";
+
 struct Cell{
     Cell();
     void toggleflag();
-    void sweep();
+    void reveal();
     void mine();
     void markAdjMine(int);
     bool flagged;  
@@ -36,7 +53,7 @@ void Cell::toggleflag(){
     }
 }
 
-void Cell::sweep(){
+void Cell::reveal(){
     if(!flagged && hidden){
         hidden = false;
         switch(state){
