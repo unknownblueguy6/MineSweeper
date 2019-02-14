@@ -1,14 +1,18 @@
 #pragma once
 
 #include <iostream>
+#include <utility>
+#include <queue>
 #include <random>
 #include "cell.hpp"
+
 
 class Field{
     public:
         Field();
         void mineTheField();
         void markAdjMineCells();
+        void startSweep();
         void drawField();
         void getMove();
     private:
@@ -17,21 +21,23 @@ class Field{
         int m;
         int x;
         int y;
+        bool firstSweep;
         GRID cells;
 
 } field;
 
 Field::Field(){
     std::cin >> l >> b >> m;
+
     x = l/2;
     y = b/2;
-    for(int i = 0; i < b; ++i){
+    firstSweep = true;
+    for(int i = 0; i < l; ++i){
         Cell c;
-        std::vector<Cell> v(l, c);
+        std::vector<Cell> v(b, c);
         cells.push_back(v);
     }
-    mineTheField();
-    markAdjMineCells();
+
 }
 
 void Field::mineTheField(){
@@ -43,6 +49,8 @@ void Field::mineTheField(){
     while(m_copy){
         auto i = x_uni(rng);
         auto j = y_uni(rng);
+        if ((i >= x - 1  && i <= x + 1) &&
+            (j >= y - 1 && j <= y + 1)) continue;
         if (cells[i][j].state != MINE){
             cells[i][j].mine();
             --m_copy;
@@ -119,7 +127,54 @@ void Field::getMove(){
             cells[x][y].toggleflag();
             return;
         case K_S:
-            cells[x][y].sweep();
+            if(firstSweep){
+                mineTheField();
+                markAdjMineCells();
+                firstSweep = false;
+            }
+            startSweep();
             return;  
+    }
+}
+
+void Field::startSweep(){
+    if(cells[x][y].state == ADJ_TO_MINE){
+        cells[x][y].reveal();
+        return;
+    }
+
+    if(cells[x][y].state == MINE){
+        //add game over condition
+        //revealAllMines() or something
+        cells[x][y].reveal();
+        return;
+    }
+
+    auto pos = std::make_pair(x, y);
+    
+    std::queue<std::pair<int, int>> cellsToCheck;
+    cellsToCheck.push(pos);
+    bool checked[l][b];
+
+    while(!cellsToCheck.empty()){
+        auto p = cellsToCheck.front();
+        int x_pos = p.first, y_pos = p.second; 
+        for(int i = x_pos - 1; i < x_pos + 2; ++i){
+            if (i < 0 || i > l-1) continue;
+            
+            for(int j = y_pos - 1; j < y_pos + 2; ++j){
+                if (j < 0 || j > b-1) continue;
+
+                switch(cells[i][j].state){
+                    case EMPTY:
+                        if(!checked[i][j]) cellsToCheck.push(std::make_pair(i, j));
+                    case ADJ_TO_MINE:
+                        cells[i][j].reveal();
+                        break;
+                }
+            }
+        }
+        cellsToCheck.pop();
+        checked[x_pos][y_pos] = true;
     }
 }
