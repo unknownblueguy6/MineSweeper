@@ -4,7 +4,6 @@
 #include <termios.h>
 
 using KEY = char;
-using COLOUR = const std::string;
 
 enum KEYS{
 	K_ESC = '\e',
@@ -46,17 +45,3 @@ KEY getKey(){
 	c = (c == K_BRAC_OPEN) ? getch() : c;
 	return c;
 }
-
-enum CELL_STATES{
-    EMPTY,
-    MINE,
-    ADJ_TO_MINE
-};
-
-COLOUR red_fg = "\033[1;31m";
-COLOUR green_fg = "\033[1;32m";
-COLOUR blue_bg = "\033[1;44m";
-COLOUR white_fg = "\033[37m";
-COLOUR white_bg = "\033[1;47m";
-COLOUR reset = "\033[0m";
-COLOUR endl = "\n";
