@@ -15,11 +15,26 @@ using COLOUR = const std::string;
 
 COLOUR red_fg = "\033[1;31m";
 COLOUR green_fg = "\033[1;32m";
-COLOUR blue_bg = "\033[1;44m";
-COLOUR white_fg = "\033[37m";
-COLOUR white_bg = "\033[1;47m";
+COLOUR yellow_fg = "\033[1:33m";
+COLOUR magenta_fg = "\033[1:35m";
+COLOUR cyan_fg = "\033[1;36m";
+COLOUR white_fg = "\033[1:37m";
+COLOUR blue_bg = "\033[44m";
+COLOUR white_bg = "\033[47m";
 COLOUR reset = "\033[0m";
 COLOUR endl = "\n";
+
+COLOUR ADJMINECOLOURS[] = {
+    reset,
+    cyan_fg, //1
+    green_fg, //2
+    red_fg, //3
+    magenta_fg, //4
+    yellow_fg, //5
+    white_fg, //6
+    magenta_fg, //7
+    red_fg //8
+};
 
 struct Cell{
     Cell();
@@ -64,7 +79,7 @@ void Cell::reveal(){
                 sym = red_fg + "✸" + reset + " │";
                 return;
             case ADJ_TO_MINE:
-                sym = white_fg + std::to_string(noOfAdjMines) + reset + " │";
+                sym = ADJMINECOLOURS[noOfAdjMines] + std::to_string(noOfAdjMines) + reset + " │";
                 return;
         }
     }
