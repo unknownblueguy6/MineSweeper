@@ -122,7 +122,6 @@ void Field::drawField(){
     for(int i = 0; i < l - 1; ++i) std::cout << "───┴";
     std::cout << "───┘";
 	std::cout << endl;
-    std::cout << x << " " << y << endl << hiddenCells <<endl;
 }
 
 void Field::getMove(){
@@ -176,6 +175,7 @@ void Field::checkVictoryAndFlagMines(){
 void Field::startSweep(){
     if(game != RUNNING) return;
     if(cells[x][y].flagged) return;
+    
     if(cells[x][y].state == ADJ_TO_MINE){
         if(cells[x][y].hidden)--hiddenCells;
         cells[x][y].reveal();
