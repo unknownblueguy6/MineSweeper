@@ -175,7 +175,7 @@ void Field::checkVictoryAndFlagMines(){
 void Field::startSweep(){
     if(game != RUNNING) return;
     if(cells[x][y].flagged) return;
-    
+
     if(cells[x][y].state == ADJ_TO_MINE){
         if(cells[x][y].hidden)--hiddenCells;
         cells[x][y].reveal();
