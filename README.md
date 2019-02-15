@@ -6,7 +6,7 @@ Use Arrow Keys to move, use F to flag a cell and S to sweep the area.
 
 ## To Do List:
 
-- [ ]  Add Win condition, Game Over Condition
+- [x]  Add Win condition, Game Over Condition
 
 - [ ] Add preset levels(Beginner, Intermediate, Expert)
 
