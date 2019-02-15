@@ -40,7 +40,7 @@ struct Cell{
     Cell();
     void toggleflag();
     void reveal();
-    void mine();
+    void setMine();
     void markAdjMine(int);
     bool flagged;  
     bool hidden;
@@ -90,7 +90,7 @@ void Cell::markAdjMine(int mines){
     noOfAdjMines = mines;
 }
 
-void Cell::mine(){
+void Cell::setMine(){
     state = MINE;
 }
 
