@@ -53,17 +53,17 @@ Cell::Cell(){
     hidden = true;
     flagged = false;
     state = EMPTY;
-    sym = white_bg + " " + reset + " │";
+    sym = white_bg + " ";
 }
 
 void Cell::toggleflag(){
     if(hidden){
         flagged = !flagged;
         if(flagged){
-            sym = green_fg + "▶" + reset + " │";
+            sym = green_fg + "▶";
         }
         else{
-            sym = white_bg + " " + reset + " │";
+            sym = white_bg + " ";
         }
     }
 }
@@ -73,13 +73,13 @@ void Cell::reveal(){
         hidden = false;
         switch(state){
             case EMPTY:
-                sym = reset + " " + reset + " │";
+                sym = reset + " ";
                 return;
             case MINE:
-                sym = red_fg + "✸" + reset + " │";
+                sym = red_fg + "✸";
                 return;
             case ADJ_TO_MINE:
-                sym = ADJMINECOLOURS[noOfAdjMines] + std::to_string(noOfAdjMines) + reset + " │";
+                sym = ADJMINECOLOURS[noOfAdjMines] + std::to_string(noOfAdjMines);
                 return;
         }
     }
