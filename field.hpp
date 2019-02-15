@@ -22,6 +22,7 @@ class Field{
         int x;
         int y;
         bool firstSweep;
+        std::vector <std::pair<int, int>> mines;
         GRID cells;
 
 } field;
@@ -52,26 +53,31 @@ void Field::mineTheField(){
         if ((i >= x - 1  && i <= x + 1) &&
             (j >= y - 1 && j <= y + 1)) continue;
         if (cells[i][j].state != MINE){
-            cells[i][j].mine();
+            cells[i][j].setMine();
+            mines.push_back(std::make_pair(i, j));
             --m_copy;
         } 
     }
 }
 
 void Field::markAdjMineCells(){
-    for(int j = 0; j < b; ++j){
-        for(int i = 0; i < l; ++i){
-            if(cells[i][j].state == MINE) continue;
-            int mines = 0;
-            for(int d = j - 1; d < j + 2; ++d){
-                if (d < 0 || d > b-1) continue;
+    for(auto mine: mines){
+        int x_pos = mine.first, y_pos = mine.second;
+        for(int i = x_pos -1; i < x_pos + 2; ++i){
+            if(i < 0 || i > l - 1) continue;
+            for(int j = y_pos - 1; j < y_pos + 2; ++j){
+                if(j < 0 || j > b - 1) continue;
+                if(cells[i][j].state == MINE)continue;
+                int mineCount = 0;
                 for(int c = i - 1; c < i + 2; ++c){
                     if (c < 0 || c > l-1) continue;
-                    
-                    if(cells[c][d].state == MINE) ++mines;
+                    for(int d = j - 1; d < j + 2; ++d){
+                        if (d < 0 || d > b-1) continue;
+                        if(cells[c][d].state == MINE) ++mineCount;
+                    }
                 }
+                if(mineCount) cells[i][j].markAdjMine(mineCount);
             }
-            if(mines) cells[i][j].markAdjMine(mines);
         }
     }
 }
@@ -90,9 +96,9 @@ void Field::drawField(){
             if(i == x && j == y){ 
                 if((cells[i][j].hidden || cells[i][j].state == EMPTY) &&
                    (!cells[i][j].flagged) ) std::cout << blue_bg << " " << reset << " │";
-                else std::cout << blue_bg << cells[i][j].sym;
+                else std::cout << blue_bg << cells[i][j].sym << reset << " │";
             }
-            else std::cout << cells[i][j].sym;
+            else std::cout << cells[i][j].sym << reset << " │";
 		}
         if(j != b-1) {
             std::cout << endl << "├";
