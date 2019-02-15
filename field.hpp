@@ -21,6 +21,7 @@ class Field{
         int m;
         int x;
         int y;
+        int flags;
         bool firstSweep;
         std::vector <std::pair<int, int>> mines;
         GRID cells;
@@ -29,9 +30,9 @@ class Field{
 
 Field::Field(){
     std::cin >> l >> b >> m;
-
     x = l/2;
     y = b/2;
+    flags = m;
     firstSweep = true;
     for(int i = 0; i < l; ++i){
         Cell c;
@@ -130,7 +131,14 @@ void Field::getMove(){
             if(x != l-1) ++x;
             return;
         case K_F:
-            cells[x][y].toggleflag();
+            if(cells[x][y].flagged){
+                ++flags;
+                cells[x][y].toggleflag();
+            }
+            else if(flags){
+                --flags;
+                cells[x][y].toggleflag();
+            }
             return;
         case K_S:
             if(firstSweep){
