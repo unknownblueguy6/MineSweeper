@@ -6,6 +6,13 @@
 #include <random>
 #include "cell.hpp"
 
+enum GAME_STATE{
+    VICTORY,
+    DEFEAT,
+    RUNNING
+};
+
+GAME_STATE game = RUNNING;
 
 class Field{
     public:
@@ -14,6 +21,7 @@ class Field{
         void markAdjMineCells();
         void startSweep();
         void drawField();
+        void checkVictoryAndFlagMines();
         void getMove();
     private:
         int l;
@@ -22,8 +30,9 @@ class Field{
         int x;
         int y;
         int flags;
+        int hiddenCells;
         bool firstSweep;
-        std::vector <std::pair<int, int>> mines;
+        std::vector <std::pair<int, int>> mines; //store the location of mines
         GRID cells;
 
 } field;
@@ -33,6 +42,7 @@ Field::Field(){
     x = l/2;
     y = b/2;
     flags = m;
+    hiddenCells = l*b;
     firstSweep = true;
     for(int i = 0; i < l; ++i){
         Cell c;
@@ -112,7 +122,7 @@ void Field::drawField(){
     for(int i = 0; i < l - 1; ++i) std::cout << "───┴";
     std::cout << "───┘";
 	std::cout << endl;
-    std::cout << x << " " << y << endl;
+    std::cout << x << " " << y << endl << hiddenCells <<endl;
 }
 
 void Field::getMove(){
@@ -151,16 +161,31 @@ void Field::getMove(){
     }
 }
 
+void Field::checkVictoryAndFlagMines(){
+     if(hiddenCells == m){
+        game = VICTORY;
+        //flag all mines that weren't flagged 
+        for(auto mine : mines){ 
+            if(!cells[mine.first][mine.second].flagged){ 
+            cells[mine.first][mine.second].toggleflag();
+            }
+        }
+    }
+}
+
 void Field::startSweep(){
+    if(game != RUNNING) return;
+    if(cells[x][y].flagged) return;
     if(cells[x][y].state == ADJ_TO_MINE){
+        if(cells[x][y].hidden)--hiddenCells;
         cells[x][y].reveal();
+        checkVictoryAndFlagMines();
         return;
     }
 
     if(cells[x][y].state == MINE){
-        //add game over condition
-        //revealAllMines() or something
-        cells[x][y].reveal();
+        game = DEFEAT;
+        for(auto mine : mines) cells[mine.first][mine.second].reveal();
         return;
     }
 
@@ -183,6 +208,7 @@ void Field::startSweep(){
                     case EMPTY:
                         if(!checked[i][j]) cellsToCheck.push(std::make_pair(i, j));
                     case ADJ_TO_MINE:
+                        if(cells[i][j].hidden) --hiddenCells;
                         cells[i][j].reveal();
                         break;
                 }
@@ -191,4 +217,6 @@ void Field::startSweep(){
         cellsToCheck.pop();
         checked[x_pos][y_pos] = true;
     }
+
+    checkVictoryAndFlagMines();
 }
