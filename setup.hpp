@@ -3,6 +3,24 @@
 #include <unistd.h>
 #include <termios.h>
 
+enum GAME_MODE{
+    BEGINNER = 1,
+    INTERMEDIATE,
+    EXPERT,
+    CUSTOM
+    
+}
+
+GAME_MODE mode;
+
+enum GAME_STATE{
+    VICTORY,
+    DEFEAT,
+    RUNNING
+};
+
+GAME_STATE state = RUNNING;
+
 using KEY = char;
 
 enum KEYS{

@@ -6,14 +6,6 @@
 #include <random>
 #include "cell.hpp"
 
-enum GAME_STATE{
-    VICTORY,
-    DEFEAT,
-    RUNNING
-};
-
-GAME_STATE game = RUNNING;
-
 class Field{
     public:
         Field();
@@ -162,7 +154,7 @@ void Field::getMove(){
 
 void Field::checkVictoryAndFlagMines(){
      if(hiddenCells == m){
-        game = VICTORY;
+        state = VICTORY;
         //flag all mines that weren't flagged 
         for(auto mine : mines){ 
             if(!cells[mine.first][mine.second].flagged){ 
@@ -173,7 +165,7 @@ void Field::checkVictoryAndFlagMines(){
 }
 
 void Field::startSweep(){
-    if(game != RUNNING) return;
+    if(state != RUNNING) return;
     if(cells[x][y].flagged) return;
 
     if(cells[x][y].state == ADJ_TO_MINE){
@@ -184,7 +176,7 @@ void Field::startSweep(){
     }
 
     if(cells[x][y].state == MINE){
-        game = DEFEAT;
+        state = DEFEAT;
         for(auto mine : mines) cells[mine.first][mine.second].reveal();
         return;
     }
