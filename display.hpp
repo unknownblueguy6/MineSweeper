@@ -32,7 +32,7 @@ void setGameMode(){
         std::cout << red_fg << "3. Expert\n";
         std::cout << std::setw(30);
         std::cout << blue_fg << "4. Custom\n\n";
-        
+        std::cout << "                       ";
         std::cin >> ch;
         
         if(ch < 1 || ch > 4) std::cout << red_fg <<"Invalid Choice. Try again\n";

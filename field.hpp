@@ -4,6 +4,7 @@
 #include <utility>
 #include <queue>
 #include <random>
+#include "buffer.hpp"
 #include "display.hpp"
 #include "colour.hpp"
 #include "cell.hpp"
@@ -113,34 +114,35 @@ void Field::markAdjMineCells(){
 }
 
 void Field::drawField(){
-    std::cout << endl;
-	std::cout << "┌" ;
-	for(int i = 0; i < l - 1; ++i) std::cout << "───┬";
-	std::cout << "───┐";
-	std::cout << endl;
+    writeBuf << endl;
+	writeBuf << "┌" ;
+	for(int i = 0; i < l - 1; ++i) writeBuf << "───┬";
+	writeBuf << "───┐";
+	writeBuf << endl;
 	for(int j = 0; j < b; ++j){
-        std::cout << "│";
+        writeBuf << "│";
 		for(int i = 0; i < l; ++i){
-            if(cells[i][j].state != MINE || cells[i][j].hidden) std::cout << " ";
-            else std::cout << " "; //implement different whitespace char here
+            if(cells[i][j].state != MINE || cells[i][j].hidden) writeBuf << " ";
+            else writeBuf << " "; //implement different whitespace char here
             if(i == x && j == y){ 
                 if((cells[i][j].hidden || cells[i][j].state == EMPTY) &&
-                   (!cells[i][j].flagged) ) std::cout << blue_bg << " " << reset << " │";
-                else std::cout << blue_bg << cells[i][j].sym << reset << " │";
+                   (!cells[i][j].flagged) ) writeBuf << blue_bg << " " << reset << " │";
+                else writeBuf << blue_bg << cells[i][j].sym << reset << " │";
             }
-            else std::cout << cells[i][j].sym << reset << " │";
+            else writeBuf << cells[i][j].sym << reset << " │";
 		}
         if(j != b-1) {
-            std::cout << endl << "├";
-            for(int k = 0; k < l-1; ++k) std::cout << "───┼";
-            std::cout << "───┤";
+            writeBuf << endl << "├";
+            for(int k = 0; k < l-1; ++k) writeBuf << "───┼";
+            writeBuf << "───┤";
         }
-        std::cout << endl;
+        writeBuf << endl;
 	}
-    std::cout << "└";
-    for(int i = 0; i < l - 1; ++i) std::cout << "───┴";
-    std::cout << "───┘";
-	std::cout << endl;
+    writeBuf << "└";
+    for(int i = 0; i < l - 1; ++i) writeBuf << "───┴";
+    writeBuf << "───┘";
+	writeBuf << endl;
+    writeBuf.goToLine(0);
 }
 
 void Field::getMove(){
