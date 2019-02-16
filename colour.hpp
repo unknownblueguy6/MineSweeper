@@ -12,4 +12,3 @@ COLOUR white_fg = "\033[1;37m";
 COLOUR blue_bg = "\033[44m";
 COLOUR white_bg = "\033[47m";
 COLOUR reset = "\033[0m";
-COLOUR endl = "\n";

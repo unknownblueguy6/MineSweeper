@@ -21,6 +21,7 @@ enum GAME_STATE{
 
 GAME_STATE state = RUNNING;
 
+const std::string endl = "\n";
 using KEY = char;
 
 enum KEYS{
