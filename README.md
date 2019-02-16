@@ -8,6 +8,8 @@ Use Arrow Keys to move, use F to flag a cell and S to sweep the area.
 
 - [x]  Add Win condition, Game Over Condition
 
+- [ ] Improve efficiency of startSweep()
+
 - [ ] Add preset levels(Beginner, Intermediate, Expert)
 
 - [ ] Add a timer(7 segment style)
