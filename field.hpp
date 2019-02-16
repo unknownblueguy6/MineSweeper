@@ -4,6 +4,7 @@
 #include <utility>
 #include <queue>
 #include <random>
+#include "colour.hpp"
 #include "cell.hpp"
 
 class Field{
