@@ -9,7 +9,7 @@ enum GAME_MODE{
     EXPERT,
     CUSTOM
     
-}
+};
 
 GAME_MODE mode;
 
