@@ -4,12 +4,16 @@
 #include "display.hpp"
 
 int main(){
+    setGameMode();
+    Field field;
+    
     while(state == RUNNING){
         dispBanner();
         field.drawField();
         field.getMove();
         system("clear");
     }
+    
     dispBanner();
     field.drawField();
     if(state == VICTORY) std::cout << green_fg << endl << "You won!" << reset;

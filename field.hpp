@@ -4,6 +4,7 @@
 #include <utility>
 #include <queue>
 #include <random>
+#include "display.hpp"
 #include "colour.hpp"
 #include "cell.hpp"
 
@@ -28,10 +29,35 @@ class Field{
         std::vector <std::pair<int, int>> mines; //store the location of mines
         GRID cells;
 
-} field;
+};
 
 Field::Field(){
-    std::cin >> l >> b >> m;
+    switch(mode){
+        case BEGINNER:
+            l = 9;
+            b = 9;
+            m = 10;
+            break;
+        case INTERMEDIATE:
+            l = 16;
+            b = 16;
+            m = 40;
+            break;
+        case EXPERT:
+            l = 30;
+            b = 16;
+            m = 99;
+            break;
+        case CUSTOM:
+            dispBanner();
+            std::cout << blue_fg << "Enter length of MineField : " << white_fg;
+            std::cin >> l;
+            std::cout << blue_fg << "Enter breadth of MineField : " << white_fg;
+            std::cin >> b;
+            std::cout << blue_fg << "Enter number of Mines : " << red_fg;
+            std::cin >> m;
+            system("clear");
+    }
     x = l/2;
     y = b/2;
     flags = m;

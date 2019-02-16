@@ -10,7 +10,7 @@ Use Arrow Keys to move, use F to flag a cell and S to sweep the area.
 
 - [ ] Improve efficiency of startSweep()
 
-- [ ] Add preset levels(Beginner, Intermediate, Expert)
+- [x] Add preset levels(Beginner, Intermediate, Expert)
 
 - [ ] Add a timer(7 segment style)
 
@@ -18,4 +18,4 @@ Use Arrow Keys to move, use F to flag a cell and S to sweep the area.
 
 - [ ] Make the board prettier
 
-- [ ] Add some ASCII art
+- [x] Add some ASCII art
