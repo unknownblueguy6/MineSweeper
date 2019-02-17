@@ -12,6 +12,7 @@ int main(){
     while(state == RUNNING){
         dispBanner();
         field.drawField();
+        dispFlagCounter();
         writeBuf.disp();
         field.getMove();
         system("clear");
@@ -20,6 +21,7 @@ int main(){
     
     dispBanner();
     field.drawField();
+    dispFlagCounter();
     writeBuf.disp();
     writeBuf.clear();
     

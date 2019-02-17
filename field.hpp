@@ -4,6 +4,7 @@
 #include <utility>
 #include <queue>
 #include <random>
+#include "SevSegDisp.hpp"
 #include "buffer.hpp"
 #include "display.hpp"
 #include "colour.hpp"
@@ -62,6 +63,7 @@ Field::Field(){
     x = l/2;
     y = b/2;
     flags = m;
+    flagDisp.set(flags);
     hiddenCells = l*b;
     firstSweep = true;
     for(int i = 0; i < l; ++i){
@@ -114,16 +116,17 @@ void Field::markAdjMineCells(){
 }
 
 void Field::drawField(){
-    writeBuf << endl;
-	writeBuf << "┌" ;
-	for(int i = 0; i < l - 1; ++i) writeBuf << "───┬";
-	writeBuf << "───┐";
-	writeBuf << endl;
+    for(int s = 0; s <= l*4; ++s) writeBuf << reset << " ";
+    writeBuf << reset << endl;
+	writeBuf << reset << "┌" ;
+	for(int i = 0; i < l - 1; ++i) writeBuf << reset << "───┬";
+	writeBuf << reset << "───┐";
+	writeBuf << reset << endl;
 	for(int j = 0; j < b; ++j){
-        writeBuf << "│";
+        writeBuf << reset << "│";
 		for(int i = 0; i < l; ++i){
-            if(cells[i][j].state != MINE || cells[i][j].hidden) writeBuf << " ";
-            else writeBuf << " "; //implement different whitespace char here
+            if(cells[i][j].state != MINE || cells[i][j].hidden) writeBuf << reset << " ";
+            else writeBuf << reset << " "; //implement different whitespace char here
             if(i == x && j == y){ 
                 if((cells[i][j].hidden || cells[i][j].state == EMPTY) &&
                    (!cells[i][j].flagged) ) writeBuf << blue_bg << " " << reset << " │";
@@ -132,16 +135,16 @@ void Field::drawField(){
             else writeBuf << cells[i][j].sym << reset << " │";
 		}
         if(j != b-1) {
-            writeBuf << endl << "├";
-            for(int k = 0; k < l-1; ++k) writeBuf << "───┼";
-            writeBuf << "───┤";
+            writeBuf << endl << reset <<"├";
+            for(int k = 0; k < l-1; ++k) writeBuf << reset << "───┼";
+            writeBuf << reset << "───┤";
         }
-        writeBuf << endl;
+        writeBuf << reset << endl;
 	}
-    writeBuf << "└";
-    for(int i = 0; i < l - 1; ++i) writeBuf << "───┴";
-    writeBuf << "───┘";
-	writeBuf << endl;
+    writeBuf << reset << "└";
+    for(int i = 0; i < l - 1; ++i) writeBuf << reset << "───┴";
+    writeBuf << reset << "───┘";
+	writeBuf << reset << endl;
     writeBuf.goToLine(0);
 }
 
@@ -163,10 +166,12 @@ void Field::getMove(){
         case K_F:
             if(cells[x][y].flagged){
                 ++flags;
+                ++flagDisp;
                 cells[x][y].toggleflag();
             }
             else if(flags){
                 --flags;
+                --flagDisp;
                 cells[x][y].toggleflag();
             }
             return;

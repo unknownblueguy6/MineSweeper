@@ -14,7 +14,7 @@ Use Arrow Keys to move, use F to flag a cell and S to sweep the area.
 
 - [ ] Add a timer(7 segment style)
 
-- [ ] Add a flag counter(7 segment style)
+- [x] Add a flag counter(7 segment style)
 
 - [ ] Make the board prettier
 

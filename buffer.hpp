@@ -9,6 +9,7 @@ class Buffer{
         Buffer();
         friend Buffer& operator<<(Buffer &curr, const std::string &str);
         void goToLine(int);
+        int getCurrLine();
         void disp();
         void clear();
     
@@ -46,6 +47,9 @@ void Buffer::goToLine(int n){
     else line = n;
 }
 
+int Buffer::getCurrLine(){
+    return line;
+}
 void Buffer::disp(){
     for(auto str : buf) std::cout << str << std::endl; 
 }

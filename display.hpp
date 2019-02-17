@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include "setup.hpp"
+#include "SevSegDisp.hpp"
 #include "colour.hpp"
 
 void dispBanner(){ //will be moved to separate header later
@@ -15,6 +16,21 @@ void dispBanner(){ //will be moved to separate header later
     std::cout << "##     ##  ##  ##   ### ##       ##    ## ##  ##  ## ##       ##       ##        ##       ##    ## \n"; 
     std::cout << "##     ##  ##  ##    ## ########  ######   ###  ###  ######## ######## ##        ######## ##     ##\n";
     std::cout << endl << reset;
+}
+
+void dispFlagCounter(){
+    writeBuf << white_fg;
+    writeBuf << white_fg <<"          (_)               " << endl;
+    writeBuf << white_fg <<" _ __ ___  _ _ __   ___ ___ " << endl;
+    writeBuf << white_fg <<"| '_ ` _ \\| | '_ \\ / _ / __|" << endl;
+    writeBuf << white_fg <<"| | | | | | | | | |  __\\__ \\" << endl;
+    writeBuf << white_fg <<"|_| |_| |_|_|_| |_|\\___|___/" << endl;    
+    writeBuf << reset;
+
+    flagDisp.update();
+
+    writeBuf.goToLine(0);
+
 }
 
 void setGameMode(){
