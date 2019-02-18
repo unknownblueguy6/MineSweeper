@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <utility>
-#include <queue>
+#include <vector>
 #include <random>
 #include "SevSegDisp.hpp"
 #include "buffer.hpp"
@@ -16,6 +16,7 @@ class Field{
         void mineTheField();
         void markAdjMineCells();
         void startSweep();
+        void startSweep(int, int, POSOFCELL, DIR_X, DIR_Y);
         void drawField();
         void checkVictoryAndFlagMines();
         void getMove();
@@ -201,48 +202,80 @@ void Field::checkVictoryAndFlagMines(){
 void Field::startSweep(){
     if(gameState != RUNNING) return;
     if(cells[x][y].flagged) return;
-
-    if(cells[x][y].state == ADJ_TO_MINE){
-        if(cells[x][y].hidden)--hiddenCells;
-        cells[x][y].reveal();
-        checkVictoryAndFlagMines();
-        return;
-    }
-
-    if(cells[x][y].state == MINE){
-        gameState = DEFEAT;
-        for(auto mine : mines) cells[mine.first][mine.second].reveal();
-        return;
-    }
-
-    auto pos = std::make_pair(x, y);
+    if(!cells[x][y].hidden) return;
     
-    std::queue<std::pair<int, int>> cellsToCheck;
-    cellsToCheck.push(pos);
-    bool checked[l][b];
+    switch(cells[x][y].state){
+        case EMPTY:
+            --hiddenCells;
+            cells[x][y].reveal();
+            checkVictoryAndFlagMines();
+            break;
 
-    while(!cellsToCheck.empty()){
-        auto p = cellsToCheck.front();
-        int x_pos = p.first, y_pos = p.second; 
-        for(int i = x_pos - 1; i < x_pos + 2; ++i){
-            if (i < 0 || i > l-1) continue;
-            
-            for(int j = y_pos - 1; j < y_pos + 2; ++j){
-                if (j < 0 || j > b-1) continue;
+        case ADJ_TO_MINE:
+            --hiddenCells;
+            cells[x][y].reveal();
+            checkVictoryAndFlagMines();
+            return;
+        
+        case MINE:
+            gameState = DEFEAT;
+            for(auto mine : mines) cells[mine.first][mine.second].reveal();
+            return;
+    }
+        
+    startSweep(x - 1, y - 1, CORNER, LEFT, UP);
+    startSweep(x, y - 1, EDGE, NULL_DIR_X, UP);
+    startSweep(x + 1, y - 1, CORNER, RIGHT, UP);
+    startSweep(x - 1, y, EDGE, LEFT, NULL_DIR_Y);
+    startSweep(x + 1, y, EDGE, RIGHT, NULL_DIR_Y);
+    startSweep(x - 1, y + 1, CORNER, LEFT, DOWN);
+    startSweep(x, y + 1, EDGE, NULL_DIR_X, DOWN);
+    startSweep(x + 1, y + 1, CORNER, RIGHT, DOWN);
 
-                switch(cells[i][j].state){
-                    case EMPTY:
-                        if(!checked[i][j]) cellsToCheck.push(std::make_pair(i, j));
-                    case ADJ_TO_MINE:
-                        if(cells[i][j].hidden) --hiddenCells;
-                        cells[i][j].reveal();
-                        break;
-                }
+}
+
+void Field::startSweep(int x, int y, POSOFCELL pos, DIR_X x_dir, DIR_Y y_dir){
+    checkVictoryAndFlagMines();
+    if(x < 0 || x > l-1 || y < 0 || y > b-1) return;
+    if(gameState != RUNNING) return; 
+    if(cells[x][y].flagged) return;
+    if(!cells[x][y].hidden) return;
+
+    switch(cells[x][y].state){
+        case EMPTY:
+            cells[x][y].reveal();
+            --hiddenCells;
+            if(pos == CORNER){
+                startSweep(x + x_dir, y + y_dir, CORNER, x_dir, y_dir);
+                startSweep(x + x_dir, y, EDGE, x_dir, NULL_DIR_Y);
+                startSweep(x, y + y_dir, EDGE, NULL_DIR_X, y_dir);
+                startSweep(x + x_dir, y - y_dir, CORNER, x_dir, (DIR_Y)-y_dir);
+                startSweep(x - x_dir, y + y_dir, CORNER, (DIR_X)-x_dir, y_dir);
             }
-        }
-        cellsToCheck.pop();
-        checked[x_pos][y_pos] = true;
+            
+            else{
+                startSweep(x + x_dir, y + y_dir, EDGE, x_dir, y_dir);
+                if(y_dir == NULL_DIR_Y){
+                    startSweep(x + x_dir, y - 1, CORNER, x_dir, UP);
+                    startSweep(x, y - 1, EDGE, NULL_DIR_X, UP);
+                    startSweep(x, y + 1, EDGE, NULL_DIR_X, DOWN);
+                    startSweep(x + x_dir, y + 1, CORNER, x_dir, DOWN);
+                }
+                else{
+                    startSweep(x - 1, y + y_dir, CORNER, LEFT, y_dir);
+                    startSweep(x - 1, y, EDGE, LEFT, NULL_DIR_Y);
+                    startSweep(x + 1, y, EDGE, RIGHT, NULL_DIR_Y);
+                    startSweep(x + 1, y + y_dir, CORNER, RIGHT, y_dir);
+                }
+            
+            }
+            
+            break;
+        
+        case ADJ_TO_MINE:
+            cells[x][y].reveal();
+            --hiddenCells;
+            break;
     }
 
-    checkVictoryAndFlagMines();
 }
