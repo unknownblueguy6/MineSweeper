@@ -11,7 +11,7 @@ enum GAME_MODE{
     
 };
 
-GAME_MODE mode;
+GAME_MODE gameMode;
 
 enum GAME_STATE{
     VICTORY,
@@ -19,7 +19,22 @@ enum GAME_STATE{
     RUNNING
 };
 
-GAME_STATE state = RUNNING;
+GAME_STATE gameState = RUNNING;
+
+//only used with startSweep()
+enum POSOFCELL{
+    CENTRE,
+    EDGE, 
+    CORNER
+};
+
+enum DIR{
+    NULL_DIR,
+    UP,
+    LEFT, 
+    DOWN, 
+    RIGHT
+};
 
 const std::string endl = "\n";
 using KEY = char;

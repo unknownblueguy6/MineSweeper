@@ -9,7 +9,7 @@ int main(){
     
     Field field;
     
-    while(state == RUNNING){
+    while(gameState == RUNNING){
         dispBanner();
         field.drawField();
         dispFlagCounter();
@@ -25,7 +25,7 @@ int main(){
     writeBuf.disp();
     writeBuf.clear();
     
-    if(state == VICTORY) std::cout << green_fg << endl << "You won!" << reset;
+    if(gameState == VICTORY) std::cout << green_fg << endl << "You won!" << reset;
     else std::cout << red_fg << endl << "You lost!" << reset;
     
     std::cout << endl;

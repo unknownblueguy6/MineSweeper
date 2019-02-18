@@ -52,7 +52,7 @@ void setGameMode(){
         std::cin >> ch;
         
         if(ch < 1 || ch > 4) std::cout << red_fg <<"Invalid Choice. Try again\n";
-        else mode = (GAME_MODE)ch;
+        else gameMode = (GAME_MODE)ch;
         system("clear");
     
     } while(ch < 1 || ch > 4);

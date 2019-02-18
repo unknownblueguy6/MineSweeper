@@ -34,7 +34,7 @@ class Field{
 };
 
 Field::Field(){
-    switch(mode){
+    switch(gameMode){
         case BEGINNER:
             l = 9;
             b = 9;
@@ -188,7 +188,7 @@ void Field::getMove(){
 
 void Field::checkVictoryAndFlagMines(){
      if(hiddenCells == m){
-        state = VICTORY;
+        gameState = VICTORY;
         //flag all mines that weren't flagged 
         for(auto mine : mines){ 
             if(!cells[mine.first][mine.second].flagged){ 
@@ -199,7 +199,7 @@ void Field::checkVictoryAndFlagMines(){
 }
 
 void Field::startSweep(){
-    if(state != RUNNING) return;
+    if(gameState != RUNNING) return;
     if(cells[x][y].flagged) return;
 
     if(cells[x][y].state == ADJ_TO_MINE){
@@ -210,7 +210,7 @@ void Field::startSweep(){
     }
 
     if(cells[x][y].state == MINE){
-        state = DEFEAT;
+        gameState = DEFEAT;
         for(auto mine : mines) cells[mine.first][mine.second].reveal();
         return;
     }
