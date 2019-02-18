@@ -28,12 +28,16 @@ enum POSOFCELL{
     CORNER
 };
 
-enum DIR{
-    NULL_DIR,
-    UP,
-    LEFT, 
-    DOWN, 
-    RIGHT
+enum DIR_X{
+    NULL_DIR_X = 0,
+    LEFT = -1, 
+    RIGHT = 1
+};
+
+enum DIR_Y{
+	NULL_DIR_Y = 0,
+	UP = -1,
+	DOWN = 1
 };
 
 const std::string endl = "\n";
