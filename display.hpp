@@ -40,7 +40,7 @@ void setGameMode(){
     //std::cout << cyan_fg << "5. Quit\n" << reset;
     do{
         dispBanner();
-        std::cout << std::setw(30);
+        std::cout << std::setw(26);
         std::cout << white_fg << "Choose Game Mode:\n";
         std::cout << std::setw(30);
         std::cout << green_fg << "1. Beginner\n";

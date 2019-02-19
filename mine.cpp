@@ -5,20 +5,21 @@
 #include "display.hpp"
 
 int main(){
+    system("clear");
     setGameMode();
     
     Field field;
     
     while(gameState == RUNNING){
+        system("clear");
         dispBanner();
         field.drawField();
         dispFlagCounter();
         writeBuf.disp();
         field.getMove();
-        system("clear");
         writeBuf.clear();
     }
-    
+    system("clear");
     dispBanner();
     field.drawField();
     dispFlagCounter();
