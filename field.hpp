@@ -117,35 +117,162 @@ void Field::markAdjMineCells(){
 }
 
 void Field::drawField(){
-    for(int s = 0; s <= l*4; ++s) writeBuf << reset << " ";
-    writeBuf << reset << endl;
-	writeBuf << reset << "┌" ;
-	for(int i = 0; i < l - 1; ++i) writeBuf << reset << "───┬";
-	writeBuf << reset << "───┐";
-	writeBuf << reset << endl;
-	for(int j = 0; j < b; ++j){
-        writeBuf << reset << "│";
-		for(int i = 0; i < l; ++i){
-            if(cells[i][j].state != MINE || cells[i][j].hidden) writeBuf << reset << " ";
-            else writeBuf << reset << " "; //implement different whitespace char here
+    writeBuf << reset;
+    for(int s = 0; s <= l*4; ++s) writeBuf << " ";
+    writeBuf << endl;
+
+    writeBuf << reset;
+    writeBuf << "    ";
+    if(cells[0][0].hidden) writeBuf << "┏";
+	else writeBuf << reset << "┌" ;
+	
+    for(int i = 0; i < l - 1; ++i){
+        if(cells[i][0].hidden){
+            writeBuf << "━━━";
+            if(cells[i+1][0].hidden) writeBuf << "┳";
+            else writeBuf << "┱";
+        }
+        else{
+            writeBuf << "───";
+            if(cells[i+1][0].hidden) writeBuf << "┲";
+            else writeBuf << "┬";
+        }
+    }
+
+    if(cells[l-1][0].hidden) writeBuf << "━━━┓";
+    else writeBuf << "───┐";
+	writeBuf << endl;
+	
+    writeBuf << reset;
+    for(int j = 0; j < b; ++j){
+        if(cells[0][j].hidden) writeBuf << "    ┃";
+        else writeBuf << reset << "    │";
+		
+        for(int i = 0; i < l; ++i){
+            if(cells[i][j].state != MINE || cells[i][j].hidden) writeBuf << " ";
+            else writeBuf << " "; //implement different whitespace char here
+            
             if(i == x && j == y){ 
                 if((cells[i][j].hidden || cells[i][j].state == EMPTY) &&
-                   (!cells[i][j].flagged) ) writeBuf << blue_bg << " " << reset << " │";
-                else writeBuf << blue_bg << cells[i][j].sym << reset << " │";
+                   (!cells[i][j].flagged) ) writeBuf << blue_bg << " ";
+                
+                else writeBuf << blue_bg << cells[i][j].sym;
             }
-            else writeBuf << cells[i][j].sym << reset << " │";
+            else writeBuf << cells[i][j].sym;
+
+            if(cells[i][j].hidden || (i != l-1 && cells[i+1][j].hidden)) writeBuf << reset << " ┃";
+            else writeBuf << reset << " │";
 		}
+        
         if(j != b-1) {
-            writeBuf << endl << reset <<"├";
-            for(int k = 0; k < l-1; ++k) writeBuf << reset << "───┼";
-            writeBuf << reset << "───┤";
+            writeBuf << endl;
+            writeBuf << reset;
+            writeBuf << "    ";
+            
+            if(cells[0][j].hidden){
+                if(cells[0][j+1].hidden) writeBuf << "┣";
+                else writeBuf << "┡";
+            }
+            
+            else{
+                if(cells[0][j+1].hidden) writeBuf << "┢";
+                else writeBuf << "├";
+            }
+            
+            for(int k = 0; k < l-1; ++k){
+                if(cells[k][j].hidden){
+                    writeBuf << "━━━";
+                    
+                    if     ( cells[k+1][j].hidden && !cells[k][j+1].hidden && !cells[k+1][j+1].hidden){
+                        writeBuf << "╇";
+                    }
+                    
+                    else if(!cells[k+1][j].hidden &&  cells[k][j+1].hidden && !cells[k+1][j+1].hidden){
+                        writeBuf << "╉";
+                    }
+                    
+                    else if(!cells[k+1][j].hidden && !cells[k][j+1].hidden && !cells[k+1][j+1].hidden){
+                        writeBuf << "╃";
+                    }
+                    
+                    else {
+                        writeBuf << "╋";
+                    }
+
+                }
+                else{
+                    if(cells[k][j+1].hidden) writeBuf << "━━━";
+                    else writeBuf << "───";
+                    
+                    if      ( cells[k+1][j].hidden && !cells[k][j+1].hidden && !cells[k+1][j+1].hidden){
+                        writeBuf << "╄";
+                    }
+                    
+                    else if (!cells[k+1][j].hidden &&  cells[k][j+1].hidden && !cells[k+1][j+1].hidden){
+                        writeBuf << "╅";
+                    }
+                    
+                    else if (!cells[k+1][j].hidden && !cells[k][j+1].hidden &&  cells[k+1][j+1].hidden){
+                        writeBuf << "╆";
+                    }
+                    
+                    else if ( cells[k+1][j].hidden && !cells[k][j+1].hidden &&  cells[k+1][j+1].hidden){
+                        writeBuf << "╊";
+                    }
+                    
+                    else if (!cells[k+1][j].hidden &&  cells[k][j+1].hidden &&  cells[k+1][j+1].hidden){
+                        writeBuf << "╈";
+                    }
+
+                    else if (!cells[k+1][j].hidden && !cells[k][j+1].hidden && !cells[k+1][j+1].hidden){
+                        writeBuf << "┼";
+                    }
+                    
+                    else {
+                        writeBuf << "╋";
+                    }
+                }
+            
+            }
+
+            if(cells[l-1][j].hidden){
+                writeBuf << "━━━";
+                if(cells[l-1][j+1].hidden) writeBuf << "┫";
+                else writeBuf << "┩";
+            }
+            
+            else{
+                if(cells[l-1][j+1].hidden) writeBuf << "━━━┪";
+                else writeBuf << "───┤";
+            }
+
         }
-        writeBuf << reset << endl;
+
+        writeBuf << endl;
+        writeBuf << reset;
 	}
-    writeBuf << reset << "└";
-    for(int i = 0; i < l - 1; ++i) writeBuf << reset << "───┴";
-    writeBuf << reset << "───┘";
-	writeBuf << reset << endl;
+
+    writeBuf << "    ";
+    if(cells[0][b-1].hidden) writeBuf << "┗";
+    else writeBuf  << "└";
+    
+    for(int i = 0; i < l - 1; ++i){
+        if(cells[i][b-1].hidden){
+            writeBuf << "━━━";
+            if(cells[i+1][0].hidden) writeBuf << "┻";
+            else writeBuf << "┹";
+        }
+        else{
+            writeBuf << "───";
+            if(cells[i+1][b-1].hidden) writeBuf << "┺";
+            else writeBuf << "┴";
+        }
+    }
+
+    if(cells[l-1][b-1].hidden) writeBuf << "━━━┛";
+    else writeBuf << "───┘";
+	writeBuf << endl;
+
     writeBuf.goToLine(0);
 }
 
