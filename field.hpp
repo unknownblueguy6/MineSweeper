@@ -170,7 +170,7 @@ void Field::getMove(){
                 ++flagDisp;
                 cells[x][y].toggleflag();
             }
-            else if(flags){
+            else if(flags && cells[x][y].hidden){
                 --flags;
                 --flagDisp;
                 cells[x][y].toggleflag();
