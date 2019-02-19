@@ -259,7 +259,7 @@ void Field::drawField(){
     for(int i = 0; i < l - 1; ++i){
         if(cells[i][b-1].hidden){
             writeBuf << "━━━";
-            if(cells[i+1][0].hidden) writeBuf << "┻";
+            if(cells[i+1][b-1].hidden) writeBuf << "┻";
             else writeBuf << "┹";
         }
         else{
