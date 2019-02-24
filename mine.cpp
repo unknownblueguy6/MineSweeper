@@ -10,26 +10,22 @@ int main(){
     
     Field field;
     
-    while(gameState == RUNNING){
+    while(true){
         system("clear");
+        
         dispBanner();
         field.drawField();
         dispFlagCounter();
-        dispControls();
+        if(gameState != RUNNING) dispVictoryOrDefeat();
+        else dispControls();
+        
         writeBuf.disp();
-        field.getMove();
         writeBuf.clear();
+        
+        if(gameState == RUNNING) field.getMove();
+        else break;
     }
-    system("clear");
-    dispBanner();
-    field.drawField();
-    dispFlagCounter();
-    writeBuf.disp();
-    writeBuf.clear();
-    
-    if(gameState == VICTORY) std::cout << green_fg << endl << "You won!" << reset;
-    else std::cout << red_fg << endl << "You lost!" << reset;
-    
+
     std::cout << endl;
 	
     return 0;
