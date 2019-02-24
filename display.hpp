@@ -22,7 +22,7 @@ void dispBanner(){ //will be moved to separate header later
 
 void dispFlagCounter(){
     writeBuf << white_fg <<R"(            (_)               )" << endl;
-    writeBuf << white_fg <<R"(  _ __ ___  _ _ __   ___ ___ )"<< endl;
+    writeBuf << white_fg <<R"(   _ __ ___  _ _ __   ___ ___ )" << endl;
     writeBuf << white_fg <<R"(  | '_ ` _ \| | '_ \ / _ / __|)" << endl;
     writeBuf << white_fg <<R"(  | | | | | | | | | |  __\__ \)" << endl;
     writeBuf << white_fg <<R"(  |_| |_| |_|_|_| |_|\___|___/)" << endl;    
@@ -37,7 +37,31 @@ void dispControls(){
     writeBuf << white_fg <<"  S : Sweep the area" << endl;
     writeBuf << white_fg <<"  F : Flag the current cell" << endl;
     
-    writeBuf.goToLine(0);
+}
+
+void dispVictoryOrDefeat(){
+    writeBuf << endl;
+    COLOUR col = gameState == VICTORY ? green_fg : red_fg;
+    
+    writeBuf << col << R"(  __   _____  _   _)" << endl;
+    writeBuf << col << R"(  \ \ / / _ \| | | |)" << endl;
+    writeBuf << col << R"(   \ V / (_) | |_| |)" << endl;
+    writeBuf << col << R"(    |_| \___/ \___/ )" << endl;
+
+    writeBuf << endl;
+    if(gameState == VICTORY){
+        writeBuf << col << R"(  __      _______  ____)" << endl;
+        writeBuf << col << R"(  \ \    / /_ _| \| | |)" << endl;
+        writeBuf << col << R"(   \ \/\/ / | || .` |_|)" << endl;
+        writeBuf << col << R"(    \_/\_/ |___|_|\_(_))" << endl;
+    }
+    
+    else{
+        writeBuf << col << R"(  ___   ___  ____________)" << endl;
+        writeBuf << col << R"(  | |  / _ \/ __|_   _| |)" << endl;
+        writeBuf << col << R"(  | |_| (_) \__ \ | | |_|)" << endl;
+        writeBuf << col << R"(  |____\___/|___/ |_| (_))" << endl;
+    }
 }
 
 void setGameMode(){
