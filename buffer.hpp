@@ -51,6 +51,7 @@ int Buffer::getCurrLine(){
     return line;
 }
 void Buffer::disp(){
+    goToLine(0);
     for(auto str : buf) std::cout << str << std::endl; 
 }
 
