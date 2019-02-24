@@ -4,7 +4,7 @@
 #include <utility>
 #include <vector>
 #include <random>
-#include "SevSegDisp.hpp"
+#include "sevsegdisp.hpp"
 #include "buffer.hpp"
 #include "display.hpp"
 #include "colour.hpp"

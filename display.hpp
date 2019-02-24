@@ -3,7 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include "setup.hpp"
-#include "SevSegDisp.hpp"
+#include "sevsegdisp.hpp"
 #include "colour.hpp"
 
 void dispBanner(){ //will be moved to separate header later
