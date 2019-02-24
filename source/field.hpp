@@ -52,17 +52,25 @@ Field::Field(){
             m = 99;
             break;
         case CUSTOM:
-            dispBanner();
-            std::cout << blue_fg << "Enter length of MineField : " << white_fg;
-            std::cin >> l;
-            std::cout << blue_fg << "Enter breadth of MineField : " << white_fg;
-            std::cin >> b;
-            std::cout << blue_fg << "Enter number of Mines : " << red_fg;
-            std::cin >> m;
-            system("clear");
+            do{
+                dispBanner();
+                std::cout << endl;
+                std::cout << white_fg << "    Minimum breadth of MineField is 9" << endl;
+                std::cout << white_fg << "    Maximum size of MineField is 30 x 16" << endl;
+                std::cout << blue_fg  << "    Enter length of MineField : " << white_fg;
+                std::cin >> l;
+                
+                std::cout << blue_fg  << "    Enter breadth of MineField : " << white_fg;
+                std::cin >> b;
+                
+                std::cout << blue_fg  << "    Enter number of Mines : " << red_fg;
+                std::cin >> m;
+                system("clear");
+            } while ((!l || !b || !m) || b < 9 || l > 30 || b > 16);
     }
     x = l/2;
     y = b/2;
+    if(m > l*b - 9) m = l*b - 9;
     flags = m;
     flagDisp.set(flags);
     hiddenCells = l*b;
@@ -358,6 +366,7 @@ void Field::startSweep(){
     startSweep(x - 1, y + 1, CORNER, LEFT, DOWN);
     startSweep(x, y + 1, EDGE, NULL_DIR_X, DOWN);
     startSweep(x + 1, y + 1, CORNER, RIGHT, DOWN);
+    checkVictoryAndFlagMines();
 
 }
 
