@@ -1,10 +1,28 @@
 # MineSweeper
 
-Command Line version of MineSweeper
+Command Line version of MineSweeper for GNU/Linux.
 
-Use Arrow Keys to move, use F to flag a cell and S to sweep the area.
+-->Add a gif here
 
-## To Do List:
+## Installation
 
-- [ ]  Add Controls to interface
+1. Clone the repo.
 
+```bash
+$ git clone https://github.com/unknownblueguy6/MineSweeper.git
+```
+
+2. cd to the MineSweeper folder, and then build it using the Makefile.
+   
+   (Change the compiler in the Makefile, if required)
+   
+```bash
+$ cd MineSweeper
+$ make
+```
+
+3. Run it.
+
+```bash
+$ ./mine
+```
