@@ -103,7 +103,7 @@ class SevSegDisp{
         }
         
         void set(int);
-        void update();
+        void update(std::string);
 
     
     private:
@@ -120,7 +120,7 @@ void SevSegDisp::set(int n){
     number = n;
 }
 
-void SevSegDisp::update(){
+void SevSegDisp::update(std::string prepend){
     int homeLine = writeBuf.getCurrLine();
     int nos[noOfDigits];
     int num = number;
@@ -130,8 +130,11 @@ void SevSegDisp::update(){
         num /= 10;
         --dig;
     }
-    for(auto no : nos){
-        for(auto str : numbers[no]) writeBuf << red_fg << str << " " << endl << reset;
-        writeBuf.goToLine(homeLine); 
+    for(int i = 0; i < noOfDigits; ++i){
+        for(auto str : numbers[nos[i]]){
+            if(!i) writeBuf << reset << prepend;
+            writeBuf << red_fg << str << " " << endl << reset;
+        }
+        if(i != noOfDigits -1) writeBuf.goToLine(homeLine); 
     }
 }

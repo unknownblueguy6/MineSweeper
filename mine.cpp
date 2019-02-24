@@ -15,6 +15,7 @@ int main(){
         dispBanner();
         field.drawField();
         dispFlagCounter();
+        dispControls();
         writeBuf.disp();
         field.getMove();
         writeBuf.clear();

@@ -21,23 +21,27 @@ void dispBanner(){ //will be moved to separate header later
 }
 
 void dispFlagCounter(){
-    writeBuf << white_fg;
-    writeBuf << white_fg <<R"(          (_)               )" << endl;
-    writeBuf << white_fg <<R"( _ __ ___  _ _ __   ___ ___ )"<< endl;
-    writeBuf << white_fg <<R"(| '_ ` _ \| | '_ \ / _ / __|)" << endl;
-    writeBuf << white_fg <<R"(| | | | | | | | | |  __\__ \)" << endl;
-    writeBuf << white_fg <<R"(|_| |_| |_|_|_| |_|\___|___/)" << endl;    
+    writeBuf << white_fg <<R"(            (_)               )" << endl;
+    writeBuf << white_fg <<R"(  _ __ ___  _ _ __   ___ ___ )"<< endl;
+    writeBuf << white_fg <<R"(  | '_ ` _ \| | '_ \ / _ / __|)" << endl;
+    writeBuf << white_fg <<R"(  | | | | | | | | | |  __\__ \)" << endl;
+    writeBuf << white_fg <<R"(  |_| |_| |_|_|_| |_|\___|___/)" << endl;    
     writeBuf << reset;
 
-    flagDisp.update();
+    flagDisp.update("      ");
+}
 
+void dispControls(){
+    writeBuf << endl;
+    writeBuf << white_fg <<"  ↑, ←, ↓, → : Movement" << endl;
+    writeBuf << white_fg <<"  S : Sweep the area" << endl;
+    writeBuf << white_fg <<"  F : Flag the current cell" << endl;
+    
     writeBuf.goToLine(0);
-
 }
 
 void setGameMode(){
     int ch;
-    //std::cout << cyan_fg << "5. Quit\n" << reset;
     do{
         dispBanner();
         std::cout << std::setw(26);
