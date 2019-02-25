@@ -7,7 +7,7 @@ Command Line version of MineSweeper for Unix-like systems (GNU/Linux, macOS, BSD
 </p>
 
 ## Prerequisites
-1. C++ compiler
+1. C++11 compiler
 
 
 ## Installation
