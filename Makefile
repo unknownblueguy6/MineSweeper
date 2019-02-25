@@ -6,4 +6,4 @@ CC = g++
 OBJ_NAME = mine
 
 all :
-	$(CC) $(OBJS) -o $(OBJ_NAME)
+	$(CC) $(OBJS) -std=c++11 -o $(OBJ_NAME)
