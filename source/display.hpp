@@ -33,6 +33,7 @@ void dispFlagCounter(){
 void dispControls(){
     writeBuf << endl;
     writeBuf << white_fg <<"  ↑, ←, ↓, → : Movement" << endl;
+    writeBuf << white_fg <<"  vi movements - hjkl" << endl;
     writeBuf << white_fg <<"  S : Sweep the area" << endl;
     writeBuf << white_fg <<"  F : Flag the current cell" << endl;
     
