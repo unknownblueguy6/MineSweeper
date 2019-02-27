@@ -26,7 +26,7 @@ int main(){
         else break;
     }
 
-    std::cout << endl;
+    std::cout << endl << reset;
 	
     return 0;
 }
