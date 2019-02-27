@@ -4,29 +4,37 @@
 #include "colour.hpp"
 #include "display.hpp"
 
-int main(){
+int main()
+{
     system("clear");
     setGameMode();
-    
+
     Field field;
-    
-    while(true){
+
+    while (true)
+    {
         system("clear");
-        
+
         dispBanner();
         field.drawField();
         dispFlagCounter();
-        if(gameState != RUNNING) dispVictoryOrDefeat();
-        else dispControls();
         
+        if (gameState != RUNNING)
+            dispVictoryOrDefeat();
+        else
+            dispControls();
+
         writeBuf.disp();
         writeBuf.clear();
-        
-        if(gameState == RUNNING) field.getMove();
-        else break;
+
+        if (gameState == RUNNING)
+            field.getMove();
+        else
+            break;
     }
 
-    std::cout << endl << reset;
-	
+    std::cout << endl
+              << reset;
+
     return 0;
 }

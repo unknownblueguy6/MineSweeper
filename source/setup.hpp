@@ -3,38 +3,42 @@
 #include <unistd.h>
 #include <termios.h>
 
-enum GAME_MODE{
-    BEGINNER = 1,
-    INTERMEDIATE,
-    EXPERT,
-    CUSTOM
-    
+enum GAME_MODE
+{
+	BEGINNER = 1,
+	INTERMEDIATE,
+	EXPERT,
+	CUSTOM
 };
 
 GAME_MODE gameMode;
 
-enum GAME_STATE{
-    VICTORY,
-    DEFEAT,
-    RUNNING
+enum GAME_STATE
+{
+	VICTORY,
+	DEFEAT,
+	RUNNING
 };
 
 GAME_STATE gameState = RUNNING;
 
 //only used with startSweep()
-enum POSOFCELL{
-    CENTRE,
-    EDGE, 
-    CORNER
+enum POSOFCELL
+{
+	CENTRE,
+	EDGE,
+	CORNER
 };
 
-enum DIR_X{
-    NULL_DIR_X = 0,
-    LEFT = -1, 
-    RIGHT = 1
+enum DIR_X
+{
+	NULL_DIR_X = 0,
+	LEFT = -1,
+	RIGHT = 1
 };
 
-enum DIR_Y{
+enum DIR_Y
+{
 	NULL_DIR_Y = 0,
 	UP = -1,
 	DOWN = 1
@@ -43,20 +47,22 @@ enum DIR_Y{
 const std::string endl = "\n";
 using KEY = char;
 
-enum KEYS{
+enum KEYS
+{
 	K_ESC = '\e',
 	K_BRAC_OPEN = '[',
 	K_UP = 'A',
 	K_DOWN = 'B',
 	K_LEFT = 'D',
 	K_RIGHT = 'C',
-	K_F = 'f', //flag a cell
-	K_S = 's', //sweep an area
-	K_ENTER = '\n',//sweep an area
-	K_SPACE = ' ' //flag a cell
-}; 
+	K_F = 'f',		//flag a cell
+	K_S = 's',		//sweep an area
+	K_ENTER = '\n', //sweep an area
+	K_SPACE = ' '   //flag a cell
+};
 
-enum VI_KEYS{
+enum VI_KEYS
+{
 	K_K = 75,
 	K_J = 74,
 	K_H = 72,
@@ -70,7 +76,8 @@ enum VI_KEYS{
 // #ifdef _WIN32
 // char getInput()
 
-char getch() {
+char getch()
+{
 	char buf = 0;
 	struct termios old = {0};
 	if (tcgetattr(0, &old) < 0)
@@ -90,7 +97,8 @@ char getch() {
 	return (buf);
 }
 
-KEY getKey(){
+KEY getKey()
+{
 	char c = getch();
 	c = (c == K_ESC) ? getch() : c;
 	c = (c == K_BRAC_OPEN) ? getch() : c;
