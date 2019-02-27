@@ -38,8 +38,8 @@ void dispControls()
     writeBuf << white_fg << "  ↑, ←, ↓, → : " << endl;
     writeBuf << white_fg << "       OR      Movement" << endl;
     writeBuf << white_fg << "  H, J, K, L : " << endl;
-    writeBuf << white_fg << "  S or ENTER : Sweep the area" << endl;
-    writeBuf << white_fg << "  F or SPACEBAR : Flag the current cell" << endl;
+    writeBuf << white_fg << "  S or ENTER : Sweep" << endl;
+    writeBuf << white_fg << "  F or SPACEBAR : Toggle Flag" << endl;
 }
 
 void dispVictoryOrDefeat()
