@@ -54,6 +54,17 @@ enum KEYS{
     K_S = 's' //sweep a cell
 }; 
 
+enum VI_KEYS{
+	K_K = 75,
+	K_J = 74,
+	K_H = 72,
+	K_L = 76,
+	K_k = 107,
+	K_j = 106,
+	K_h = 104,
+	K_l = 108
+};
+
 // #ifdef _WIN32
 // char getInput()
 
