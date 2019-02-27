@@ -307,6 +307,7 @@ void Field::getMove(){
         case K_RIGHT:
             if(x != l-1) ++x;
             return;
+        case K_SPACE:
         case K_F:
             if(cells[x][y].flagged){
                 ++flags;
@@ -319,6 +320,7 @@ void Field::getMove(){
                 cells[x][y].toggleflag();
             }
             return;
+        case K_ENTER:
         case K_S:
             if(firstSweep){
                 mineTheField();

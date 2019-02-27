@@ -50,8 +50,10 @@ enum KEYS{
 	K_DOWN = 'B',
 	K_LEFT = 'D',
 	K_RIGHT = 'C',
-    K_F = 'f', //flag a cell
-    K_S = 's' //sweep a cell
+	K_F = 'f', //flag a cell
+	K_S = 's', //sweep an area
+	K_ENTER = '\n',//sweep an area
+	K_SPACE = ' ' //flag a cell
 }; 
 
 enum VI_KEYS{
