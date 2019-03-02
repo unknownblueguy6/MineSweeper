@@ -22,6 +22,8 @@ enum GAME_STATE
 
 GAME_STATE gameState = RUNNING;
 
+bool QUICKCLEAR = false; //controls whether quick clear has been enabled
+
 //only used with startSweep()
 enum POSOFCELL
 {

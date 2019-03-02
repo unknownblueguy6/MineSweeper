@@ -8,6 +8,7 @@ int main()
 {
     system("clear");
     setGameMode();
+    getQuickClearSettings();
 
     Field field;
 

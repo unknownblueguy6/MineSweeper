@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cctype>
 #include "setup.hpp"
 #include "sevsegdisp.hpp"
 #include "colour.hpp"
@@ -96,10 +97,49 @@ void setGameMode()
         std::cin >> ch;
 
         if (ch < 1 || ch > 4)
+        {
             std::cout << red_fg << "Invalid Choice. Try again\n";
+            auto c = getch();
+        }
         else
             gameMode = (GAME_MODE)ch;
         system("clear");
 
     } while (ch < 1 || ch > 4);
+}
+
+void getQuickClearSettings()
+{
+    char ch;
+    int choice;
+    do
+    {
+        dispBanner();
+        std::cout << endl;
+        std::cout << yellow_fg << 
+        R"(            Quick Clear : If a cell with a number on it is already revealed,
+                         and it's neighbours have been flagged with the same number,
+                         then all tiles adjacent to this cell are also sweeped.
+            
+            Enable Quick Clear? )";
+        
+        std::cout << white_fg << "[" << green_fg <<"Y" << white_fg << " / " << red_fg << "N" << white_fg << "] : " << reset;
+
+        std::cin >> ch;
+
+        ch = std::tolower(ch);
+
+        if (!(ch == 'y' || ch == 'n'))
+        {
+            std::cout << red_fg << "Invalid Choice. Try again\n";
+            auto c = getch();
+        }
+        else
+            QUICKCLEAR = std::tolower(ch) == 'y' ? true : false;
+        
+        system("clear");
+
+
+    } while (!(ch == 'y' || ch == 'n'));
+    
 }
