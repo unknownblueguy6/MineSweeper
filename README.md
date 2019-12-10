@@ -1,3 +1,5 @@
+[![Run on Repl.it](https://repl.it/badge/github/unknownblueguy6/MineSweeper)](https://repl.it/github/unknownblueguy6/MineSweeper)
+
 # MineSweeper
 
 Command Line version of MineSweeper for Unix-like systems (GNU/Linux, macOS, BSD).
