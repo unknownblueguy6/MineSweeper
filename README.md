@@ -1,5 +1,6 @@
+![](https://img.shields.io/aur/votes/minesweeper-cli-git?label=aur%20votes)
+![](https://img.shields.io/aur/version/minesweeper-cli-git)<br/>
 [![Run on Repl.it](https://repl.it/badge/github/unknownblueguy6/MineSweeper)](https://repl.it/github/unknownblueguy6/MineSweeper)
-
 # MineSweeper
 
 Command Line version of MineSweeper for Unix-like systems (GNU/Linux, macOS, BSD).
@@ -14,6 +15,12 @@ Command Line version of MineSweeper for Unix-like systems (GNU/Linux, macOS, BSD
 
 ## Installation
 
+### Arch
+```bash
+$ yay -S minesweeper-cli-git
+```
+
+### Others
 1. Clone the repo.
 
 ```bash
