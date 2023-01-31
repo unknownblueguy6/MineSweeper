@@ -3,10 +3,18 @@
 #include "setup.hpp"
 #include "colour.hpp"
 #include "display.hpp"
+#include <stdio.h>
+
+void clrscr()
+{
+    int n;
+    for (n = 0; n < 10; n++)
+        printf( "\n\n\n\n\n\n\n\n\n\n" );
+}
 
 int main()
 {
-    system("clear");
+    clrscr();
     setGameMode();
     getQuickClearSettings();
 
@@ -14,7 +22,7 @@ int main()
 
     while (true)
     {
-        system("clear");
+        clrscr();
 
         dispBanner();
         field.drawField();

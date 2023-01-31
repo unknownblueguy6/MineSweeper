@@ -612,5 +612,7 @@ void Field::startSweep(int x, int y, POSOFCELL pos, DIR_X x_dir, DIR_Y y_dir)
         cells[x][y].reveal();
         --hiddenCells;
         break;
+    default:
+        break;
     }
 }
